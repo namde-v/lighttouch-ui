@@ -1,0 +1,43 @@
+<RCC>
+  <qresource prefix="/qml">
+    <file alias="main.qml">/home/hatch/workspace/lighttouch-ui/qml/main.qml</file>
+    <file alias="views/DeviceSidebar.qml">/home/hatch/workspace/lighttouch-ui/qml/views/DeviceSidebar.qml</file>
+    <file alias="views/DevicePlaceholder.qml">/home/hatch/workspace/lighttouch-ui/qml/views/DevicePlaceholder.qml</file>
+    <file alias="views/DevicePane.qml">/home/hatch/workspace/lighttouch-ui/qml/views/DevicePane.qml</file>
+    <file alias="views/BannerStack.qml">/home/hatch/workspace/lighttouch-ui/qml/views/BannerStack.qml</file>
+    <file alias="views/DisplayPlaceholder.qml">/home/hatch/workspace/lighttouch-ui/qml/views/DisplayPlaceholder.qml</file>
+    <file alias="views/DeviceScreen.qml">/home/hatch/workspace/lighttouch-ui/qml/views/DeviceScreen.qml</file>
+    <file alias="views/MainMenuBar.qml">/home/hatch/workspace/lighttouch-ui/qml/views/MainMenuBar.qml</file>
+    <file alias="dialogs/DeleteDevicesDialog.qml">/home/hatch/workspace/lighttouch-ui/qml/dialogs/DeleteDevicesDialog.qml</file>
+    <file alias="dialogs/ConfirmDialog.qml">/home/hatch/workspace/lighttouch-ui/qml/dialogs/ConfirmDialog.qml</file>
+    <file alias="dialogs/AddDeviceSheet.qml">/home/hatch/workspace/lighttouch-ui/qml/dialogs/AddDeviceSheet.qml</file>
+    <file alias="dialogs/SettingsDialog.qml">/home/hatch/workspace/lighttouch-ui/qml/dialogs/SettingsDialog.qml</file>
+    <file alias="dialogs/AboutDialog.qml">/home/hatch/workspace/lighttouch-ui/qml/dialogs/AboutDialog.qml</file>
+    <file alias="dialogs/LicensesDialog.qml">/home/hatch/workspace/lighttouch-ui/qml/dialogs/LicensesDialog.qml</file>
+    <file alias="dialogs/HelpWindow.qml">/home/hatch/workspace/lighttouch-ui/qml/dialogs/HelpWindow.qml</file>
+    <file alias="dialogs/JailbreakDialog.qml">/home/hatch/workspace/lighttouch-ui/qml/dialogs/JailbreakDialog.qml</file>
+    <file alias="dialogs/NetworkAccessDialog.qml">/home/hatch/workspace/lighttouch-ui/qml/dialogs/NetworkAccessDialog.qml</file>
+    <file alias="panes/CarrierPanel.qml">/home/hatch/workspace/lighttouch-ui/qml/panes/CarrierPanel.qml</file>
+    <file alias="panes/TweaksPanel.qml">/home/hatch/workspace/lighttouch-ui/qml/panes/TweaksPanel.qml</file>
+    <file alias="panes/StorageSettings.qml">/home/hatch/workspace/lighttouch-ui/qml/panes/StorageSettings.qml</file>
+    <file alias="panes/ProxySettings.qml">/home/hatch/workspace/lighttouch-ui/qml/panes/ProxySettings.qml</file>
+    <file alias="panes/DebugPort.qml">/home/hatch/workspace/lighttouch-ui/qml/panes/DebugPort.qml</file>
+    <file alias="panes/CaptureSettings.qml">/home/hatch/workspace/lighttouch-ui/qml/panes/CaptureSettings.qml</file>
+    <file alias="views/FilesBrowser.qml">/home/hatch/workspace/lighttouch-ui/qml/views/FilesBrowser.qml</file>
+    <file alias="views/LogWindow.qml">/home/hatch/workspace/lighttouch-ui/qml/views/LogWindow.qml</file>
+    <file alias="views/LogView.qml">/home/hatch/workspace/lighttouch-ui/qml/views/LogView.qml</file>
+    <file alias="views/ConsoleSplit.qml">/home/hatch/workspace/lighttouch-ui/qml/views/ConsoleSplit.qml</file>
+    <file alias="views/AppsInspector.qml">/home/hatch/workspace/lighttouch-ui/qml/views/AppsInspector.qml</file>
+    <file alias="views/AppRow.qml">/home/hatch/workspace/lighttouch-ui/qml/views/AppRow.qml</file>
+    <file alias="views/StoreRow.qml">/home/hatch/workspace/lighttouch-ui/qml/views/StoreRow.qml</file>
+    <file alias="views/FirmwareJobsWindow.qml">/home/hatch/workspace/lighttouch-ui/qml/views/FirmwareJobsWindow.qml</file>
+    <file alias="views/CatalogDetailsDialog.qml">/home/hatch/workspace/lighttouch-ui/qml/views/CatalogDetailsDialog.qml</file>
+    <file alias="views/RecordingButton.qml">/home/hatch/workspace/lighttouch-ui/qml/views/RecordingButton.qml</file>
+    <file alias="views/DropHighlight.qml">/home/hatch/workspace/lighttouch-ui/qml/views/DropHighlight.qml</file>
+    <file alias="views/CaptureSounds.qml">/home/hatch/workspace/lighttouch-ui/qml/views/CaptureSounds.qml</file>
+    <file alias="sounds/shutter.wav">/home/hatch/workspace/lighttouch-ui/qml/sounds/shutter.wav</file>
+    <file alias="sounds/record-start.wav">/home/hatch/workspace/lighttouch-ui/qml/sounds/record-start.wav</file>
+    <file alias="sounds/record-stop.wav">/home/hatch/workspace/lighttouch-ui/qml/sounds/record-stop.wav</file>
+  </qresource>
+</RCC>
+
