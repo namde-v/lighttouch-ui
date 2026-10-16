@@ -1,0 +1,7 @@
+Target dependency graph (3 targets)
+Target 'AllExcludingTests' in project 'Aggregate'
+➜ Explicit dependency on target 'LTMockCore-product' in project 'LTMockCore'
+➜ Explicit dependency on target 'LTMockCore' in project 'LTMockCore'
+Target 'LTMockCore-product' in project 'LTMockCore'
+➜ Explicit dependency on target 'LTMockCore' in project 'LTMockCore'
+Target 'LTMockCore' in project 'LTMockCore' (no dependencies)

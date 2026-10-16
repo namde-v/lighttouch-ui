@@ -1,8 +1,0 @@
-<RCC>
-  <qresource prefix="/art">
-    <file alias="iphone.png">art/iphone.png</file>
-    <file alias="ipod.png">art/ipod.png</file>
-    <file alias="ipad.png">art/ipad.png</file>
-    <file alias="device-generic.png">art/device-generic.png</file>
-  </qresource>
-</RCC>
