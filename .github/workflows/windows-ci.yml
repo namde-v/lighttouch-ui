@@ -48,21 +48,3 @@ jobs:
 
       - name: Test
         run: ctest --test-dir build -C Release --output-on-failure
-
-      # Temporary Windows bring-up diagnostics: run the failing binaries
-      # directly so raw stdout/stderr, loader errors and exit codes are
-      # visible in the log.
-      - name: Diagnose failures
-        if: failure()
-        continue-on-error: true
-        run: |
-          $env:QT_QPA_PLATFORM = "offscreen"
-          $env:LTM_BRIDGE_MOCK = "1"
-          $env:LTM_BRIDGE_MOCK_QUIET = "1"
-          foreach ($t in @("tst_applaunch", "tst_surface1", "tst_surface2", "tst_surface11", "tst_surface12")) {
-            $exe = "build\tests\Release\$t.exe"
-            Write-Host "=== $t ==="
-            & $exe -o "$t.log,txt" 2>&1 | Select-Object -First 60
-            Write-Host "exit code: $LASTEXITCODE"
-            if (Test-Path "$t.log") { Get-Content "$t.log" | Select-Object -First 40 }
-          }

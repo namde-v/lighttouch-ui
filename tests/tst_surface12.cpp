@@ -12,7 +12,7 @@
 #include <QQmlComponent>
 #include <QQmlContext>
 #include <QQuickItem>
-#include <QJSValue>
+#include <QQuickWindow>
 
 #include "Bridge.h"
 #include "adapters/LTDeviceListAdapter.h"
@@ -125,59 +125,21 @@ private slots:
 
     void dropHighlightShowsOnlyWhenAccepted() {
         Fixture f;
+        QQuickWindow window;
+        window.resize(300, 300);
         QObject *ring = f.load("/views/DropHighlight.qml");
         QVERIFY2(ring != nullptr, "DropHighlight failed to load");
+        // A windowless QQuickItem's visible flag does not stick on some
+        // platforms (observed on Windows/Qt 6.8); parent to the window.
+        if (auto *item = qobject_cast<QQuickItem *>(ring)) {
+            item->setParentItem(window.contentItem());
+            item->setSize(window.size());
+        }
+        window.show();
+        QTRY_VERIFY_WITH_TIMEOUT(window.isExposed(), 5000);
         QVERIFY(!ring->property("visible").toBool());
-        // TEMP DIAGNOSTIC (Windows CI): dump what "show" resolves to.
-        const QMetaObject *mo = ring->metaObject();
-        for (int i = mo->methodOffset(); i < mo->methodCount(); ++i) {
-            const QMetaMethod m = mo->method(i);
-            if (QString::fromLatin1(m.name()).contains(QStringLiteral("show")))
-                qDebug() << "method:" << m.methodSignature()
-                         << "type:" << m.methodType()
-                         << "params:" << m.parameterCount();
-        }
-        const bool invoked =
-            QMetaObject::invokeMethod(ring, "show",
-                                      Q_ARG(QVariant, QVariant(true)));
-        qDebug() << "invokeMethod returned:" << invoked
-                 << "visible now:" << ring->property("visible").toBool();
-        // TEMP DIAGNOSTIC 2: try direct QJSValue call.
-        QJSValue objVal = f.engine.newQObject(ring);
-        QJSValue showFn = objVal.property("show");
-        qDebug() << "showFn isCallable:" << showFn.isCallable();
-        QJSValue jsResult = showFn.call(QJSValueList{true});
-        qDebug() << "after QJSValue call, visible:"
-                 << ring->property("visible").toBool()
-                 << "isError:" << jsResult.isError();
-        // TEMP DIAGNOSTIC 3: try setProperty directly.
-        ring->setProperty("visible", true);
-        qDebug() << "after setProperty(true), visible:"
-                 << ring->property("visible").toBool();
-        // TEMP DIAGNOSTIC 4: check if 'root' id resolves; try via QJSValue.
-        QJSValue visibleProp = objVal.property("visible");
-        qDebug() << "QJSValue visible before set:" << visibleProp.toBool();
-        objVal.setProperty("visible", true);
-        qDebug() << "after QJSValue setProperty, ring visible:"
-                 << ring->property("visible").toBool();
-        // TEMP DIAGNOSTIC 5: is it really a QQuickItem? Try the C++ API.
-        auto *item = qobject_cast<QQuickItem *>(ring);
-        qDebug() << "qobject_cast<QQuickItem*>:" << (item != nullptr);
-        if (item) {
-            item->setVisible(true);
-            qDebug() << "after item->setVisible(true), isVisible:"
-                     << item->isVisible()
-                     << "property:" << ring->property("visible").toBool();
-        }
-        // TEMP DIAGNOSTIC 6: inspect the visible property metadata.
-        const int propIdx = mo->indexOfProperty("visible");
-        if (propIdx >= 0) {
-            const QMetaProperty prop = mo->property(propIdx);
-            qDebug() << "visible prop isWritable:" << prop.isWritable()
-                     << "isReadable:" << prop.isReadable()
-                     << "typeName:" << prop.typeName();
-        }
-        QVERIFY(invoked);
+        QVERIFY(QMetaObject::invokeMethod(ring, "show",
+                                          Q_ARG(QVariant, QVariant(true))));
         QVERIFY(ring->property("visible").toBool());
         QVERIFY(QMetaObject::invokeMethod(ring, "show",
                                           Q_ARG(QVariant, QVariant(false))));
