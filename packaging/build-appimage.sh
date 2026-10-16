@@ -153,6 +153,10 @@ rm -rf "$APPDIR"
 mkdir -p "$(dirname "$OUTPUT")"
 export QMAKE
 export QML_SOURCES_PATHS="$UI_DIR/qml"   # QML lives in qrc: point the plugin at sources
+# linuxdeploy resolves the executable's NEEDED entries itself: it must see the
+# (possibly non-system) Qt libraries.
+QT_LIBDIR="$("$QMAKE" -query QT_INSTALL_LIBS)"
+export LD_LIBRARY_PATH="${QT_LIBDIR}${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 export VERSION
 log "running linuxdeploy (Qt plugin)"
 "$LINUXDEPLOY" --appdir "$APPDIR" \
