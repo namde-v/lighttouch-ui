@@ -52,7 +52,7 @@ while [[ $# -gt 0 ]]; do
 done
 OUTPUT="${OUTPUT:-$UI_DIR/build/LightTouch-${VERSION}-x86_64.AppImage}"
 
-log() { echo "[pack] $*"; }
+log() { echo "[pack] $*" >&2; }
 die() { echo "[pack] ERROR: $*" >&2; exit 1; }
 need() { command -v "$1" >/dev/null 2>&1 || die "missing required tool: $1"; }
 
@@ -81,7 +81,7 @@ resolve_appcore() {
     local pkg="$CROSS_DIR/Packages/LTAppCore"
     if [[ -f "$pkg/Package.swift" ]] && command -v swift >/dev/null 2>&1; then
         log "building libLTAppCore (SwiftPM release) from $pkg"
-        (cd "$pkg" && swift build -c release 2>&1 | tail -3)
+        (cd "$pkg" && swift build -c release 2>&1 | tail -3 >&2)
         local so
         so="$(find "$pkg/.build" -name libLTAppCore.so -type f 2>/dev/null | head -1)"
         [[ -n "$so" ]] || die "SwiftPM build finished but libLTAppCore.so not found"
@@ -128,9 +128,9 @@ fetch_tool() { # name url
     curl -fsSL -o "$dest" "$2" || die "download failed: $2"
     chmod +x "$dest"
 }
-extract_appimage() { # appimage -> dir
+extract_appimage() { # appimage -> prints AppRun path (logs go to stderr)
     local img="$1" dest="$TOOLS_DIR/$2.extracted"
-    if [[ -x "$dest/AppRun" ]]; then echo "$dest/AppRun"; return; fi
+    if [[ -x "$dest/squashfs-root/AppRun" ]]; then echo "$dest/squashfs-root/AppRun"; return; fi
     log "extracting $(basename "$img") (no FUSE needed)"
     rm -rf "$dest" && mkdir -p "$dest"
     (cd "$dest" && "$img" --appimage-extract >/dev/null 2>&1) \
