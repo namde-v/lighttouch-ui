@@ -127,8 +127,21 @@ private slots:
         QObject *ring = f.load("/views/DropHighlight.qml");
         QVERIFY2(ring != nullptr, "DropHighlight failed to load");
         QVERIFY(!ring->property("visible").toBool());
-        QVERIFY(QMetaObject::invokeMethod(ring, "show",
-                                          Q_ARG(QVariant, QVariant(true))));
+        // TEMP DIAGNOSTIC (Windows CI): dump what "show" resolves to.
+        const QMetaObject *mo = ring->metaObject();
+        for (int i = mo->methodOffset(); i < mo->methodCount(); ++i) {
+            const QMetaMethod m = mo->method(i);
+            if (QString::fromLatin1(m.name()).contains(QStringLiteral("show")))
+                qDebug() << "method:" << m.methodSignature()
+                         << "type:" << m.methodType()
+                         << "params:" << m.parameterCount();
+        }
+        const bool invoked =
+            QMetaObject::invokeMethod(ring, "show",
+                                      Q_ARG(QVariant, QVariant(true)));
+        qDebug() << "invokeMethod returned:" << invoked
+                 << "visible now:" << ring->property("visible").toBool();
+        QVERIFY(invoked);
         QVERIFY(ring->property("visible").toBool());
         QVERIFY(QMetaObject::invokeMethod(ring, "show",
                                           Q_ARG(QVariant, QVariant(false))));

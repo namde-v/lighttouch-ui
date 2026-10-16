@@ -37,6 +37,8 @@ jobs:
           host: windows
           target: desktop
           arch: win64_msvc2022_64
+          # qml/views/CaptureSounds.qml needs QtMultimedia.
+          modules: "qtmultimedia"
 
       - name: Configure
         run: cmake -B build
