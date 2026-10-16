@@ -177,7 +177,7 @@ log "running linuxdeploy (Qt plugin)"
 "$LINUXDEPLOY" --appdir "$APPDIR" \
     -e "$APP_BIN" \
     -d "$SCRIPT_DIR/lighttouch.desktop" \
-    -i "$SCRIPT_DIR/icon.png" \
+    -i "$SCRIPT_DIR/lighttouch.png" \
     --plugin qt >"$BUILD_DIR-deploy.log" 2>&1 \
     || { tail -40 "$BUILD_DIR-deploy.log"; die "linuxdeploy failed"; }
 log "linuxdeploy done"

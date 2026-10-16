@@ -67,9 +67,9 @@ def main():
         + chunk(b"IDAT", zlib.compress(bytes(px), 9))
         + chunk(b"IEND", b"")
     )
-    with open("icon.png", "wb") as f:
+    with open("lighttouch.png", "wb") as f:
         f.write(png)
-    print(f"wrote icon.png ({len(png)} bytes)")
+    print(f"wrote lighttouch.png ({len(png)} bytes)")
 
 
 if __name__ == "__main__":
