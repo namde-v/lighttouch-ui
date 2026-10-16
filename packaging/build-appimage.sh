@@ -11,6 +11,15 @@
 # AppImage also runs on 24.04), Qt 6.4+ (qmake), cmake, a C++17 compiler,
 # patchelf, file, curl, python3.
 #
+# System packages needed on the build host (Ubuntu 22.04):
+#   cmake g++ patchelf file curl python3 ninja-build
+#   libgl-dev libegl-dev libxkbcommon-dev          # QtGui configure-time deps
+#   libgl1 libegl1 libxkbcommon0 libdbus-1-3      # Qt runtime deps
+#   libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1
+#   libxcb-randr0 libxcb-render-util0 libxcb-shape0 libxcb-sync1
+#   libxcb-xfixes0 libxcb-xinerama0 libxcb-xkb1    # xcb platform plugin deps
+# Qt itself comes from QT_DIR (aqtinstall recommended: see README below).
+#
 # Usage:
 #   packaging/build-appimage.sh [--output FILE] [--skip-smoke] [--keep-appdir]
 #
