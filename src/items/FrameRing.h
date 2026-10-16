@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <atomic>
 #include <cstdint>
 
 namespace ltframe {
@@ -40,6 +41,22 @@ constexpr uint64_t kLayoutVersion = 1;
 constexpr size_t kStatusBytes = 4096;
 constexpr int kFrameCount = 3;
 
+#ifdef _MSC_VER
+// MSVC has no __atomic_* builtins. Emulate with MSVC's volatile
+// acquire/release semantics plus seq-cst fences (the standard
+// Batty-et-al. mappings for seq-cst load/store).
+inline uint64_t loadSeq(const volatile uint64_t *p) {
+    std::atomic_thread_fence(std::memory_order_seq_cst);
+    return *p;
+}
+inline void storeSeq(volatile uint64_t *p, uint64_t v) {
+    *p = v;
+    std::atomic_thread_fence(std::memory_order_seq_cst);
+}
+inline uint64_t loadAcq(const volatile uint64_t *p) {
+    return *p;  // MSVC volatile read is acquire
+}
+#else
 inline uint64_t loadSeq(const volatile uint64_t *p) {
     return __atomic_load_n(p, __ATOMIC_SEQ_CST);
 }
@@ -49,6 +66,7 @@ inline void storeSeq(volatile uint64_t *p, uint64_t v) {
 inline uint64_t loadAcq(const volatile uint64_t *p) {
     return __atomic_load_n(p, __ATOMIC_ACQUIRE);
 }
+#endif
 
 // Reader side of the protocol (mirrors FrameRingReader.front()). Runs on the
 // UI thread in response to kLTEventFrameAvailable; the render thread only

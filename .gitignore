@@ -7,3 +7,5 @@ cmake_install.cmake
 Makefile
 CTestTestfile.cmake
 Testing/
+
+build*/

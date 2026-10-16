@@ -1,15 +1,15 @@
 [
   {
     "contents" : {
-      "guid" : "Workspace:/home/hatch/workspace/lighttouch-cross/ui/mockcore",
+      "guid" : "Workspace:/home/hatch/workspace/lighttouch-ui/mockcore",
       "name" : "LTMockCore",
-      "path" : "/home/hatch/workspace/lighttouch-cross/ui/mockcore",
+      "path" : "/home/hatch/workspace/lighttouch-ui/mockcore",
       "projects" : [
-        "c5993f2b0e137a1700b0fb05d4413cd83a2c9253627b3772cdb8341055849ce3",
-        "443eb4ace6e797fc6bfdaf3a370c5822ac20c1cafc170c00f352539a3fbb297e"
+        "ff4d3719cae2c89c7552909cc5baa8e3de938ac355044acd30be258c4675c953",
+        "c9f133a81b976de741d4009f1b0076466027474cc134716e07fc2ebddc2f6d13"
       ]
     },
-    "signature" : "67008eec0007b9a2c1f11e57f848b52ca5a19a40caff98ec4f072ce8ba1d06d6",
+    "signature" : "55163daf34891dd826045c0d03aea79ecf9c3a89e037c2a0b1c70769eb16d0ef",
     "type" : "workspace"
   },
   {
@@ -210,8 +210,8 @@
               }
             ],
             "guid" : "PACKAGE:mockcore::MAINGROUP::REF_2",
-            "name" : "/home/hatch/workspace/lighttouch-cross/ui/mockcore/Sources/LTMockCore",
-            "path" : "/home/hatch/workspace/lighttouch-cross/ui/mockcore/Sources/LTMockCore",
+            "name" : "/home/hatch/workspace/lighttouch-ui/mockcore/Sources/LTMockCore",
+            "path" : "/home/hatch/workspace/lighttouch-ui/mockcore/Sources/LTMockCore",
             "sourceTree" : "<absolute>",
             "type" : "group"
           }
@@ -223,8 +223,8 @@
         "type" : "group"
       },
       "guid" : "PACKAGE:mockcore",
-      "path" : "/home/hatch/workspace/lighttouch-cross/ui/mockcore/Package.swift",
-      "projectDirectory" : "/home/hatch/workspace/lighttouch-cross/ui/mockcore",
+      "path" : "/home/hatch/workspace/lighttouch-ui/mockcore/Package.swift",
+      "projectDirectory" : "/home/hatch/workspace/lighttouch-ui/mockcore",
       "projectIsPackage" : "true",
       "projectName" : "LTMockCore",
       "targets" : [
@@ -233,7 +233,7 @@
         "24dae7ade844d850fe1a72c066b9adb719e42910901354eac8dda145beb01cf5"
       ]
     },
-    "signature" : "c5993f2b0e137a1700b0fb05d4413cd83a2c9253627b3772cdb8341055849ce3",
+    "signature" : "ff4d3719cae2c89c7552909cc5baa8e3de938ac355044acd30be258c4675c953",
     "type" : "project"
   },
   {
@@ -596,8 +596,8 @@
         "type" : "group"
       },
       "guid" : "AGGREGATE",
-      "path" : "/home/hatch/workspace/lighttouch-cross/ui/mockcore/Package.swift",
-      "projectDirectory" : "/home/hatch/workspace/lighttouch-cross/ui/mockcore",
+      "path" : "/home/hatch/workspace/lighttouch-ui/mockcore/Package.swift",
+      "projectDirectory" : "/home/hatch/workspace/lighttouch-ui/mockcore",
       "projectIsPackage" : "true",
       "projectName" : "Aggregate",
       "targets" : [
@@ -605,7 +605,7 @@
         "a7b0b05f8dd3567813760e38074c598f64f1b5c4113a4dc907d97cd2b0eade08"
       ]
     },
-    "signature" : "443eb4ace6e797fc6bfdaf3a370c5822ac20c1cafc170c00f352539a3fbb297e",
+    "signature" : "c9f133a81b976de741d4009f1b0076466027474cc134716e07fc2ebddc2f6d13",
     "type" : "project"
   },
   {
