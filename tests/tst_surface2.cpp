@@ -144,7 +144,8 @@ private slots:
         QVERIFY2(f.waitLink(), "DisplayLinkReady never arrived");
         QCOMPARE(f.display.frameWidth(), 320);
         QCOMPARE(f.display.frameHeight(), 480);
-        QVERIFY(f.display.heldFrameIndex() >= 0);
+        // The first frame arrives asynchronously after the link; wait for it.
+        QTRY_VERIFY_WITH_TIMEOUT(f.display.heldFrameIndex() >= 0, 5000);
         // The mock ticks at ~30fps; the UI-thread protocol must advance.
         QSignalSpy frames(&f.display, &LTDisplayAdapter::frameAvailable);
         QVERIFY(frames.isValid());

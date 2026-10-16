@@ -160,6 +160,23 @@ private slots:
         objVal.setProperty("visible", true);
         qDebug() << "after QJSValue setProperty, ring visible:"
                  << ring->property("visible").toBool();
+        // TEMP DIAGNOSTIC 5: is it really a QQuickItem? Try the C++ API.
+        auto *item = qobject_cast<QQuickItem *>(ring);
+        qDebug() << "qobject_cast<QQuickItem*>:" << (item != nullptr);
+        if (item) {
+            item->setVisible(true);
+            qDebug() << "after item->setVisible(true), isVisible:"
+                     << item->isVisible()
+                     << "property:" << ring->property("visible").toBool();
+        }
+        // TEMP DIAGNOSTIC 6: inspect the visible property metadata.
+        const int propIdx = mo->indexOfProperty("visible");
+        if (propIdx >= 0) {
+            const QMetaProperty prop = mo->property(propIdx);
+            qDebug() << "visible prop isWritable:" << prop.isWritable()
+                     << "isReadable:" << prop.isReadable()
+                     << "typeName:" << prop.typeName();
+        }
         QVERIFY(invoked);
         QVERIFY(ring->property("visible").toBool());
         QVERIFY(QMetaObject::invokeMethod(ring, "show",
