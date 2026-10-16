@@ -78,7 +78,7 @@ function(lt_add_swift_mockcore target)
     set(_gen "${_dir}/Sources/LTMockCore/GeneratedStubs.swift")
     # Regenerate at configure time so the stubs can never drift from lt_bridge.h.
     execute_process(
-        COMMAND python3 "${CMAKE_CURRENT_SOURCE_DIR}/cmake/gen_bridge.py"
+        COMMAND "${LT_PYTHON_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/cmake/gen_bridge.py"
                 --header "${CMAKE_CURRENT_SOURCE_DIR}/src/lt_bridge.h"
                 --mode swift --out "${_gen}"
                 --mock-exclude "${LT_MOCK_EXCLUDE_CSV}"

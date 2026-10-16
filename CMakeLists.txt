@@ -16,6 +16,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
+# MSVC: treat all sources as UTF-8 (tr() strings contain non-ASCII text).
+add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/utf-8>)
+
+# Portable Python for gen_bridge.py — Windows runners expose `python`,
+# not `python3`.
+find_program(LT_PYTHON_EXECUTABLE NAMES python3 python REQUIRED)
+message(STATUS "Python for codegen: ${LT_PYTHON_EXECUTABLE}")
+
 if(NOT DEFINED ENV{CMAKE_BUILD_PARALLEL_LEVEL} AND NOT DEFINED CMAKE_BUILD_PARALLEL_LEVEL)
     set(CMAKE_BUILD_PARALLEL_LEVEL 2)
 endif()
@@ -46,7 +54,7 @@ include(SwiftAppCore)
 # drift from the header: regenerating is part of every configure.
 set(LT_GENERATED_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated")
 execute_process(
-    COMMAND python3 "${CMAKE_CURRENT_SOURCE_DIR}/cmake/gen_bridge.py"
+    COMMAND "${LT_PYTHON_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/cmake/gen_bridge.py"
             --header "${CMAKE_CURRENT_SOURCE_DIR}/src/lt_bridge.h"
             --mode cpp --outdir "${LT_GENERATED_DIR}"
             --mock-exclude "${LT_MOCK_EXCLUDE_CSV}"

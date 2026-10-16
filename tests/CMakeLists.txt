@@ -14,8 +14,11 @@ function(lt_add_qtest name source)
     target_link_libraries(${name} PRIVATE ltbridge Qt6::Quick Qt6::Qml Qt6::Test)
     target_include_directories(${name} PRIVATE
         "${CMAKE_CURRENT_SOURCE_DIR}/../src")
+    # Forward slashes: on Windows a native backslash path inside this string
+    # literal would form invalid escapes (e.g. \U in C:\Users).
+    file(TO_CMAKE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../qml" _lt_qml_dir)
     target_compile_definitions(${name} PRIVATE
-        LT_QML_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../qml")
+        LT_QML_DIR="${_lt_qml_dir}")
     if(UNIX)
         # So dlopen'd Swift stand-in finds its runtime in tests too.
         set_target_properties(${name} PROPERTIES

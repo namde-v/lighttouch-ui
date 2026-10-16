@@ -1,0 +1,48 @@
+# LightTouch Qt UI — Windows CI.
+#
+# Builds the Qt 6 shell + bridge on windows-latest and runs the Qt Test
+# suite offscreen.
+#
+# What is STUBBED here (deliberately): the Swift core. No Windows Swift
+# toolchain is wired up yet, so CMake skips the SwiftPM targets
+# (LT_SWIFT_EXECUTABLE is absent) and every test runs against the
+# compiled-in mock core (LTM_BRIDGE_MOCK=1). The real-library path —
+# QLibrary loading LTAppCore.dll per src/Bridge.cpp — is exercised once
+# the real core exists; the bridge code for it is already in place.
+name: Windows UI CI
+
+on:
+  push:
+    branches: [win/**]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    name: Qt 6 build + ctest (windows-latest)
+    runs-on: windows-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Install Qt 6
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: "6.8.3"
+          host: windows
+          target: desktop
+          arch: win64_msvc2022_64
+
+      - name: Configure
+        run: cmake -B build
+
+      - name: Build
+        run: cmake --build build --config Release --parallel
+
+      - name: Test
+        run: ctest --test-dir build -C Release --output-on-failure
