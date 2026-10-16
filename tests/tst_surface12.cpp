@@ -12,6 +12,7 @@
 #include <QQmlComponent>
 #include <QQmlContext>
 #include <QQuickItem>
+#include <QJSValue>
 
 #include "Bridge.h"
 #include "adapters/LTDeviceListAdapter.h"
@@ -141,6 +142,14 @@ private slots:
                                       Q_ARG(QVariant, QVariant(true)));
         qDebug() << "invokeMethod returned:" << invoked
                  << "visible now:" << ring->property("visible").toBool();
+        // TEMP DIAGNOSTIC 2: try direct QJSValue call.
+        QJSValue objVal = f.engine.newQObject(ring);
+        QJSValue showFn = objVal.property("show");
+        qDebug() << "showFn isCallable:" << showFn.isCallable();
+        QJSValue jsResult = showFn.call(QJSValueList{true});
+        qDebug() << "after QJSValue call, visible:"
+                 << ring->property("visible").toBool()
+                 << "isError:" << jsResult.isError();
         QVERIFY(invoked);
         QVERIFY(ring->property("visible").toBool());
         QVERIFY(QMetaObject::invokeMethod(ring, "show",
