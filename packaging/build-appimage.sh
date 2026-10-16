@@ -147,6 +147,12 @@ fetch_tool appimagetool-x86_64.AppImage \
 LINUXDEPLOY="$(extract_appimage "$TOOLS_DIR/linuxdeploy-x86_64.AppImage" linuxdeploy)"
 PLUGIN_QT="$(extract_appimage "$TOOLS_DIR/linuxdeploy-plugin-qt-x86_64.AppImage" plugin-qt)"
 APPIMAGETOOL="$(extract_appimage "$TOOLS_DIR/appimagetool-x86_64.AppImage" appimagetool)"
+# linuxdeploy discovers input plugins as `linuxdeploy-plugin-<name>` on PATH
+# (or next to its own binary). The extracted plugin AppRun isn't either, so
+# link it into a private bindir.
+mkdir -p "$TOOLS_DIR/bin"
+ln -sf "$PLUGIN_QT" "$TOOLS_DIR/bin/linuxdeploy-plugin-qt"
+export PATH="$TOOLS_DIR/bin:$PATH"
 
 # --- Deploy ------------------------------------------------------------------------
 rm -rf "$APPDIR"
