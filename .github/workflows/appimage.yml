@@ -1,0 +1,102 @@
+# Linux AppImage packaging.
+#
+# Builds the Qt 6 UI + the Swift libLTAppCore (release) on Ubuntu 22.04 and
+# bundles everything (Qt libs, Swift runtime, core .so) into a single
+# LightTouch-<version>-x86_64.AppImage, then smoke-tests it headless.
+#
+# Triggers: version tags (v*) and manual dispatch ONLY — a full Swift release
+# build takes 20-40 minutes, so this deliberately does NOT run on every push.
+# Uploads the AppImage as a workflow artifact (attaching to a GitHub Release
+# is a one-line addition once releases are cut).
+
+name: Linux AppImage
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      swift_version:
+        description: 'Swift toolchain version'
+        default: '6.4.1'
+        required: false
+      qt_version:
+        description: 'Qt version'
+        default: '6.4.3'
+        required: false
+
+env:
+  SWIFT_VERSION: ${{ inputs.swift_version || '6.4.1' }}
+  QT_VERSION: ${{ inputs.qt_version || '6.4.3' }}
+  APP_VERSION: ${{ github.ref_type == 'tag' && github.ref_name || '0.1.0-dev' }}
+
+jobs:
+  appimage:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 120
+    steps:
+      - name: Check out Qt UI
+        uses: actions/checkout@v4
+        with:
+          path: ui
+
+      - name: Check out lighttouch-cross (Swift core)
+        uses: actions/checkout@v4
+        with:
+          repository: namde-v/lighttouch-cross
+          path: port
+          # Shallow is fine; SwiftPM resolves deps from Package.resolved.
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq cmake ninja-build patchelf file curl \
+            python3 libgl1 libegl1 libxkbcommon0 libdbus-1-3
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          modules: 'qtmultimedia'
+          cache: true
+
+      - name: Install Swift (swiftly)
+        run: |
+          set -e
+          curl -fsSL -o /tmp/swiftly.tar.gz \
+            "https://download.swift.org/swiftly/linux/swiftly-$(uname -m).tar.gz"
+          mkdir -p "$HOME/.local/bin"
+          tar -xzf /tmp/swiftly.tar.gz -C "$HOME/.local/bin"
+          export PATH="$HOME/.local/bin:$PATH"
+          swiftly install --assume-yes "${{ env.SWIFT_VERSION }}"
+          SWIFT_BIN="$HOME/.swiftly/bin/swift"
+          "$SWIFT_BIN" --version
+          echo "SWIFT_BIN=$SWIFT_BIN" >> "$GITHUB_ENV"
+          echo "LT_SWIFT_RUNTIME_DIR=$HOME/.swiftly/toolchains/${{ env.SWIFT_VERSION }}/usr/lib/swift/linux" >> "$GITHUB_ENV"
+
+      - name: Build AppImage
+        run: |
+          set -e
+          export PATH="$HOME/.local/bin:$HOME/.swiftly/bin:$PATH"
+          # SwiftPM writes a lot of temp files; keep them off the small /tmp.
+          mkdir -p "$HOME/swift-tmp"
+          export TMPDIR="$HOME/swift-tmp"
+          # Local apt Qt deps for the SwiftPM build (icu etc. come with the toolchain).
+          bash ui/packaging/build-appimage.sh \
+            --output "$GITHUB_WORKSPACE/LightTouch-${{ env.APP_VERSION }}-x86_64.AppImage"
+        env:
+          UI_DIR: ${{ github.workspace }}/ui
+          CROSS_DIR: ${{ github.workspace }}/port
+          QT_DIR: ${{ env.QT_ROOT_DIR }}
+          VERSION: ${{ env.APP_VERSION }}
+          # LT_SWIFT_RUNTIME_DIR from the swiftly step.
+
+      - name: Upload AppImage
+        uses: actions/upload-artifact@v4
+        with:
+          name: LightTouch-${{ env.APP_VERSION }}-x86_64.AppImage
+          path: |
+            ${{ github.workspace }}/LightTouch-${{ env.APP_VERSION }}-x86_64.AppImage
+            ${{ github.workspace }}/LightTouch-${{ env.APP_VERSION }}-x86_64.AppImage.sha256
+          if-no-files-found: error

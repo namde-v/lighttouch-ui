@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=LightTouch
+GenericName=iOS Emulator
+Comment=LightTouch cross-platform iOS emulator (Qt UI + Swift core)
+Exec=lighttouch
+Icon=lighttouch
+Categories=Utility;Emulator;
+StartupWMClass=lighttouch
+Terminal=false
