@@ -182,6 +182,19 @@ log "running linuxdeploy (Qt plugin)"
     || { tail -40 "$BUILD_DIR-deploy.log"; die "linuxdeploy failed"; }
 log "linuxdeploy done"
 
+# linuxdeploy-plugin-qt ships only the xcb platform plugin; also bundle
+# offscreen + minimal so the AppImage runs headless (CI, servers, ssh).
+# Their Qt deps already live in usr/lib; mirror the deployed plugins' rpath.
+QT_PLUGINDIR="$("$QMAKE" -query QT_INSTALL_PLUGINS)"
+for _p in libqoffscreen.so libqminimal.so; do
+    if [[ -f "$QT_PLUGINDIR/platforms/$_p" ]]; then
+        cp -f "$QT_PLUGINDIR/platforms/$_p" "$APPDIR/usr/plugins/platforms/"
+        patchelf --force-rpath --set-rpath '$ORIGIN/../../lib:$ORIGIN' \
+            "$APPDIR/usr/plugins/platforms/$_p"
+        log "extra platform plugin: $_p"
+    fi
+done
+
 # --- Stage libLTAppCore + Swift runtime ----------------------------------------------
 log "staging libLTAppCore.so + Swift runtime into AppDir"
 cp -f "$APPCORE_SO" "$APPDIR/usr/bin/libLTAppCore.so"
