@@ -1,0 +1,4 @@
+module LTSpike {
+header "LTSpike-Swift.h"
+export *
+}

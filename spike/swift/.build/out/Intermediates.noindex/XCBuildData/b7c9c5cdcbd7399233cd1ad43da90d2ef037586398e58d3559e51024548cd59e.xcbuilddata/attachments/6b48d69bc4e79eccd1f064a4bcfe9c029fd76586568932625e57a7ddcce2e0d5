@@ -1,0 +1,19 @@
+{
+  "" : {
+    "diagnostics" : "/home/hatch/workspace/lighttouch-cross/ui/spike/swift/.build/out/Intermediates.noindex/LTSpike.build/Debug-linux-x86_64/LTSpike-t.build/Objects-normal/x86_64/LTSpike-primary.dia",
+    "emit-module-dependencies" : "/home/hatch/workspace/lighttouch-cross/ui/spike/swift/.build/out/Intermediates.noindex/LTSpike.build/Debug-linux-x86_64/LTSpike-t.build/Objects-normal/x86_64/LTSpike-primary-emit-module.d",
+    "emit-module-diagnostics" : "/home/hatch/workspace/lighttouch-cross/ui/spike/swift/.build/out/Intermediates.noindex/LTSpike.build/Debug-linux-x86_64/LTSpike-t.build/Objects-normal/x86_64/LTSpike-primary-emit-module.dia",
+    "pch" : "/home/hatch/workspace/lighttouch-cross/ui/spike/swift/.build/out/Intermediates.noindex/LTSpike.build/Debug-linux-x86_64/LTSpike-t.build/Objects-normal/x86_64/LTSpike-primary-Bridging-header.pch",
+    "swift-dependencies" : "/home/hatch/workspace/lighttouch-cross/ui/spike/swift/.build/out/Intermediates.noindex/LTSpike.build/Debug-linux-x86_64/LTSpike-t.build/Objects-normal/x86_64/LTSpike-primary.swiftdeps"
+  },
+  "/home/hatch/workspace/lighttouch-cross/ui/spike/swift/Sources/LTSpike/SpikeLib.swift" : {
+    "const-values" : "/home/hatch/workspace/lighttouch-cross/ui/spike/swift/.build/out/Intermediates.noindex/LTSpike.build/Debug-linux-x86_64/LTSpike-t.build/Objects-normal/x86_64/SpikeLib.swiftconstvalues",
+    "dependencies" : "/home/hatch/workspace/lighttouch-cross/ui/spike/swift/.build/out/Intermediates.noindex/LTSpike.build/Debug-linux-x86_64/LTSpike-t.build/Objects-normal/x86_64/SpikeLib.d",
+    "diagnostics" : "/home/hatch/workspace/lighttouch-cross/ui/spike/swift/.build/out/Intermediates.noindex/LTSpike.build/Debug-linux-x86_64/LTSpike-t.build/Objects-normal/x86_64/SpikeLib.dia",
+    "index-unit-output-path" : "/LTSpike.build/Debug-linux-x86_64/LTSpike-t.build/Objects-normal/x86_64/SpikeLib.o",
+    "llvm-bc" : "/home/hatch/workspace/lighttouch-cross/ui/spike/swift/.build/out/Intermediates.noindex/LTSpike.build/Debug-linux-x86_64/LTSpike-t.build/Objects-normal/x86_64/SpikeLib.bc",
+    "object" : "/home/hatch/workspace/lighttouch-cross/ui/spike/swift/.build/out/Intermediates.noindex/LTSpike.build/Debug-linux-x86_64/LTSpike-t.build/Objects-normal/x86_64/SpikeLib.o",
+    "swift-dependencies" : "/home/hatch/workspace/lighttouch-cross/ui/spike/swift/.build/out/Intermediates.noindex/LTSpike.build/Debug-linux-x86_64/LTSpike-t.build/Objects-normal/x86_64/SpikeLib.swiftdeps",
+    "swiftmodule" : "/home/hatch/workspace/lighttouch-cross/ui/spike/swift/.build/out/Intermediates.noindex/LTSpike.build/Debug-linux-x86_64/LTSpike-t.build/Objects-normal/x86_64/SpikeLib~partial.swiftmodule"
+  }
+}

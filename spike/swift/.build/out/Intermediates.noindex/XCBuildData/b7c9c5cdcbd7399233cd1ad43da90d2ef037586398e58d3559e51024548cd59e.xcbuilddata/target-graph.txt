@@ -1,0 +1,7 @@
+Target dependency graph (3 targets)
+Target 'AllExcludingTests' in project 'Aggregate'
+➜ Explicit dependency on target 'LTSpike-product' in project 'LTSpike'
+➜ Explicit dependency on target 'LTSpike' in project 'LTSpike'
+Target 'LTSpike-product' in project 'LTSpike'
+➜ Explicit dependency on target 'LTSpike' in project 'LTSpike'
+Target 'LTSpike' in project 'LTSpike' (no dependencies)

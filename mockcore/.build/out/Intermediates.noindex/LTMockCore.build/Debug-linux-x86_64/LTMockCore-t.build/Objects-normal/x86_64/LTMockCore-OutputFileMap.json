@@ -1,0 +1,29 @@
+{
+  "" : {
+    "diagnostics" : "/home/hatch/workspace/lighttouch-cross/ui/mockcore/.build/out/Intermediates.noindex/LTMockCore.build/Debug-linux-x86_64/LTMockCore-t.build/Objects-normal/x86_64/LTMockCore-primary.dia",
+    "emit-module-dependencies" : "/home/hatch/workspace/lighttouch-cross/ui/mockcore/.build/out/Intermediates.noindex/LTMockCore.build/Debug-linux-x86_64/LTMockCore-t.build/Objects-normal/x86_64/LTMockCore-primary-emit-module.d",
+    "emit-module-diagnostics" : "/home/hatch/workspace/lighttouch-cross/ui/mockcore/.build/out/Intermediates.noindex/LTMockCore.build/Debug-linux-x86_64/LTMockCore-t.build/Objects-normal/x86_64/LTMockCore-primary-emit-module.dia",
+    "pch" : "/home/hatch/workspace/lighttouch-cross/ui/mockcore/.build/out/Intermediates.noindex/LTMockCore.build/Debug-linux-x86_64/LTMockCore-t.build/Objects-normal/x86_64/LTMockCore-primary-Bridging-header.pch",
+    "swift-dependencies" : "/home/hatch/workspace/lighttouch-cross/ui/mockcore/.build/out/Intermediates.noindex/LTMockCore.build/Debug-linux-x86_64/LTMockCore-t.build/Objects-normal/x86_64/LTMockCore-primary.swiftdeps"
+  },
+  "/home/hatch/workspace/lighttouch-cross/ui/mockcore/Sources/LTMockCore/GeneratedStubs.swift" : {
+    "const-values" : "/home/hatch/workspace/lighttouch-cross/ui/mockcore/.build/out/Intermediates.noindex/LTMockCore.build/Debug-linux-x86_64/LTMockCore-t.build/Objects-normal/x86_64/GeneratedStubs.swiftconstvalues",
+    "dependencies" : "/home/hatch/workspace/lighttouch-cross/ui/mockcore/.build/out/Intermediates.noindex/LTMockCore.build/Debug-linux-x86_64/LTMockCore-t.build/Objects-normal/x86_64/GeneratedStubs.d",
+    "diagnostics" : "/home/hatch/workspace/lighttouch-cross/ui/mockcore/.build/out/Intermediates.noindex/LTMockCore.build/Debug-linux-x86_64/LTMockCore-t.build/Objects-normal/x86_64/GeneratedStubs.dia",
+    "index-unit-output-path" : "/LTMockCore.build/Debug-linux-x86_64/LTMockCore-t.build/Objects-normal/x86_64/GeneratedStubs.o",
+    "llvm-bc" : "/home/hatch/workspace/lighttouch-cross/ui/mockcore/.build/out/Intermediates.noindex/LTMockCore.build/Debug-linux-x86_64/LTMockCore-t.build/Objects-normal/x86_64/GeneratedStubs.bc",
+    "object" : "/home/hatch/workspace/lighttouch-cross/ui/mockcore/.build/out/Intermediates.noindex/LTMockCore.build/Debug-linux-x86_64/LTMockCore-t.build/Objects-normal/x86_64/GeneratedStubs.o",
+    "swift-dependencies" : "/home/hatch/workspace/lighttouch-cross/ui/mockcore/.build/out/Intermediates.noindex/LTMockCore.build/Debug-linux-x86_64/LTMockCore-t.build/Objects-normal/x86_64/GeneratedStubs.swiftdeps",
+    "swiftmodule" : "/home/hatch/workspace/lighttouch-cross/ui/mockcore/.build/out/Intermediates.noindex/LTMockCore.build/Debug-linux-x86_64/LTMockCore-t.build/Objects-normal/x86_64/GeneratedStubs~partial.swiftmodule"
+  },
+  "/home/hatch/workspace/lighttouch-cross/ui/mockcore/Sources/LTMockCore/MockCore.swift" : {
+    "const-values" : "/home/hatch/workspace/lighttouch-cross/ui/mockcore/.build/out/Intermediates.noindex/LTMockCore.build/Debug-linux-x86_64/LTMockCore-t.build/Objects-normal/x86_64/MockCore.swiftconstvalues",
+    "dependencies" : "/home/hatch/workspace/lighttouch-cross/ui/mockcore/.build/out/Intermediates.noindex/LTMockCore.build/Debug-linux-x86_64/LTMockCore-t.build/Objects-normal/x86_64/MockCore.d",
+    "diagnostics" : "/home/hatch/workspace/lighttouch-cross/ui/mockcore/.build/out/Intermediates.noindex/LTMockCore.build/Debug-linux-x86_64/LTMockCore-t.build/Objects-normal/x86_64/MockCore.dia",
+    "index-unit-output-path" : "/LTMockCore.build/Debug-linux-x86_64/LTMockCore-t.build/Objects-normal/x86_64/MockCore.o",
+    "llvm-bc" : "/home/hatch/workspace/lighttouch-cross/ui/mockcore/.build/out/Intermediates.noindex/LTMockCore.build/Debug-linux-x86_64/LTMockCore-t.build/Objects-normal/x86_64/MockCore.bc",
+    "object" : "/home/hatch/workspace/lighttouch-cross/ui/mockcore/.build/out/Intermediates.noindex/LTMockCore.build/Debug-linux-x86_64/LTMockCore-t.build/Objects-normal/x86_64/MockCore.o",
+    "swift-dependencies" : "/home/hatch/workspace/lighttouch-cross/ui/mockcore/.build/out/Intermediates.noindex/LTMockCore.build/Debug-linux-x86_64/LTMockCore-t.build/Objects-normal/x86_64/MockCore.swiftdeps",
+    "swiftmodule" : "/home/hatch/workspace/lighttouch-cross/ui/mockcore/.build/out/Intermediates.noindex/LTMockCore.build/Debug-linux-x86_64/LTMockCore-t.build/Objects-normal/x86_64/MockCore~partial.swiftmodule"
+  }
+}

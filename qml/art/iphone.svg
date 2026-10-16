@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- iPhone silhouette (classic, home button) — flat stand-in for Finder's product artwork -->
+  <rect x="16" y="4" width="32" height="56" rx="7" fill="#2b2f36"/>
+  <rect x="19" y="9" width="26" height="42" rx="2" fill="#101418"/>
+  <rect x="21" y="11" width="22" height="38" rx="1" fill="#3d6ea5" opacity="0.55"/>
+  <circle cx="32" cy="55" r="3.2" fill="none" stroke="#8a93a0" stroke-width="1.6"/>
+  <rect x="28" y="6" width="8" height="1.8" rx="0.9" fill="#8a93a0"/>
+</svg>

@@ -1,0 +1,4 @@
+module LTMockCore {
+header "LTMockCore-Swift.h"
+export *
+}
