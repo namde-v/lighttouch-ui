@@ -189,7 +189,8 @@ cp -f "$APPCORE_SO" "$APPDIR/usr/bin/libLTAppCore.so"
 patchelf --force-rpath --set-rpath '$ORIGIN' "$APPDIR/usr/bin/libLTAppCore.so"
 shopt -s nullglob
 SWIFT_LIBS=( "$LT_SWIFT_RUNTIME_DIR"/libswift*.so* "$LT_SWIFT_RUNTIME_DIR"/libdispatch*.so* \
-             "$LT_SWIFT_RUNTIME_DIR"/libFoundation*.so* "$LT_SWIFT_RUNTIME_DIR"/libBlocksRuntime*.so* )
+             "$LT_SWIFT_RUNTIME_DIR"/libFoundation*.so* "$LT_SWIFT_RUNTIME_DIR"/libBlocksRuntime*.so* \
+             "$LT_SWIFT_RUNTIME_DIR"/lib_FoundationICU.so* )
 [[ ${#SWIFT_LIBS[@]} -gt 0 ]] || die "no Swift runtime libs matched in $LT_SWIFT_RUNTIME_DIR"
 for lib in "${SWIFT_LIBS[@]}"; do
     [[ -f "$lib" ]] || continue
