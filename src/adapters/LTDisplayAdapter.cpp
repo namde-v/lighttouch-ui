@@ -26,7 +26,10 @@ struct MappedShm {
 
 MappedShm mapShm(int fd, size_t size) {
 #ifdef Q_OS_WIN
-    HANDLE h = reinterpret_cast<HANDLE>(static_cast<quintptr>(fd));
+    // The ABI's fd carries the low 32 bits of the mapping HANDLE value;
+    // go through uint32_t to avoid sign-extension.
+    HANDLE h = reinterpret_cast<HANDLE>(
+        static_cast<quintptr>(static_cast<uint32_t>(fd)));
     // Read/write: the reader protocol publishes its hold in the status
     // segment (the writer never touches that slot).
     void *base = MapViewOfFile(h, FILE_MAP_READ | FILE_MAP_WRITE, 0, 0, size);

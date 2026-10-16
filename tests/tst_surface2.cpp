@@ -77,6 +77,16 @@ class TstSurface2 : public QObject {
     };
 
 private slots:
+    void initTestCase() {
+        qputenv("LTM_BRIDGE_MOCK", "1");
+        qputenv("LTM_BRIDGE_MOCK_QUIET", "1");
+        qunsetenv("LTM_APPCORE_LIB");
+        // QSettings needs a real organization/app on Windows (registry);
+        // without it the zoom persistence below silently writes nowhere.
+        QCoreApplication::setOrganizationName(QStringLiteral("LightTouchTest"));
+        QCoreApplication::setApplicationName(QStringLiteral("tst_surface2"));
+    }
+
     // The reader protocol itself: writer publishes frames, the reader holds
     // the latest segment and hands it back, pixels land in the held segment.
     void frameRingProtocol() {

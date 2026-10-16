@@ -150,6 +150,16 @@ private slots:
         qDebug() << "after QJSValue call, visible:"
                  << ring->property("visible").toBool()
                  << "isError:" << jsResult.isError();
+        // TEMP DIAGNOSTIC 3: try setProperty directly.
+        ring->setProperty("visible", true);
+        qDebug() << "after setProperty(true), visible:"
+                 << ring->property("visible").toBool();
+        // TEMP DIAGNOSTIC 4: check if 'root' id resolves; try via QJSValue.
+        QJSValue visibleProp = objVal.property("visible");
+        qDebug() << "QJSValue visible before set:" << visibleProp.toBool();
+        objVal.setProperty("visible", true);
+        qDebug() << "after QJSValue setProperty, ring visible:"
+                 << ring->property("visible").toBool();
         QVERIFY(invoked);
         QVERIFY(ring->property("visible").toBool());
         QVERIFY(QMetaObject::invokeMethod(ring, "show",
