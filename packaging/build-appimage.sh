@@ -241,8 +241,9 @@ if [[ "$SKIP_SMOKE" -eq 0 ]]; then
     rc=$?
     set -e
     log "smoke run exit: $rc (124 == still running after 25s: expected)"
-    grep -a "Bridge ready (mock: false)" "$SMOKE_LOG" \
-        || { log "smoke log:"; cat "$SMOKE_LOG"; die "bridge handshake failed (no 'Bridge ready (mock: false)')"; }
+    # qInfo() separates stream items with spaces: "Bridge ready (mock: false )".
+    grep -aqE "Bridge ready \(mock: false" "$SMOKE_LOG" \
+        || { log "smoke log:"; cat "$SMOKE_LOG"; die "bridge handshake failed"; }
     grep -aq "failed to load qrc:/qml/main.qml" "$SMOKE_LOG" && die "QML failed to load"
     log "SMOKE PASS: bridge handshake OK against real libLTAppCore (mock: false)"
 fi
