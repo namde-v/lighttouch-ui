@@ -37,6 +37,8 @@ jobs:
           host: windows
           target: desktop
           arch: win64_msvc2022_64
+          # qml/views/CaptureSounds.qml needs QtMultimedia.
+          modules: "qtmultimedia"
 
       - name: Configure
         run: cmake -B build
@@ -46,11 +48,3 @@ jobs:
 
       - name: Test
         run: ctest --test-dir build -C Release --output-on-failure
-
-      # Temporary Windows bring-up diagnostics: rerun failures verbosely so
-      # the raw test output (or loader errors) are visible in the log.
-      - name: Diagnose failures
-        if: failure()
-        continue-on-error: true
-        run: |
-          ctest --test-dir build -C Release --rerun-failed -V 2>&1 | Select-Object -First 250

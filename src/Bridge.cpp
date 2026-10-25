@@ -30,17 +30,21 @@
 #include <ctime>
 #include <vector>
 #include <memory>
-#ifndef Q_OS_WIN
+#include <thread>
+#include <atomic>
+#include <chrono>
+#ifdef Q_OS_WIN
+#include <windows.h>
+#else
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <thread>
-#include <atomic>
-#include <chrono>
 #endif
 #include <string>
 #include <map>
+
+#include "items/FrameRing.h"
 
 namespace {
 
@@ -258,14 +262,18 @@ static Bridge *g_mockBridge = nullptr;
 // publishes animated test frames at ~30fps using the real
 // FrameRingWriter/Reader protocol. The real helper's ring replaces this when
 // libLTAppCore lands; the DisplayItem cannot tell the difference.
-// (POSIX-only: on Windows the mock exports no ring yet.)
-#ifndef Q_OS_WIN
+// POSIX: shm_open/mmap. Windows: pagefile-backed file mapping; the event's
+// fd field carries the mapping HANDLE value (same process, per ABI §4).
 class MockFrameRing {
 public:
     static constexpr int kWidth = 320;
     static constexpr int kHeight = 480;
 
+#ifdef Q_OS_WIN
+    HANDLE hMap = nullptr;
+#else
     int fd = -1;
+#endif
     uint8_t *base = nullptr;
     size_t size = 0;
     std::atomic<bool> stopFlag{false};
@@ -274,6 +282,21 @@ public:
     bool start() {
         const int stride = kWidth * 4;
         size = 4096 + 3 * static_cast<size_t>(kHeight) * stride;
+#ifdef Q_OS_WIN
+        hMap = ::CreateFileMappingW(INVALID_HANDLE_VALUE, nullptr, PAGE_READWRITE,
+                                    static_cast<DWORD>(size >> 32),
+                                    static_cast<DWORD>(size & 0xFFFFFFFF),
+                                    nullptr);
+        if (!hMap)
+            return false;
+        base = static_cast<uint8_t *>(::MapViewOfFile(
+            hMap, FILE_MAP_READ | FILE_MAP_WRITE, 0, 0, size));
+        if (!base) {
+            ::CloseHandle(hMap);
+            hMap = nullptr;
+            return false;
+        }
+#else
         char name[64];
         snprintf(name, sizeof(name), "/lt-mock-ring-%d-%lu",
                  static_cast<int>(::getpid()),
@@ -295,6 +318,7 @@ public:
             base = nullptr;
             return false;
         }
+#endif
         volatile uint64_t *st = status();
         st[0] = 0x4C544652494E4700ULL; // "LTFRING\0" magic
         st[1] = 1;                     // layoutVersion
@@ -311,21 +335,40 @@ public:
         if (writer.joinable())
             writer.join();
         if (base) {
+#ifdef Q_OS_WIN
+            ::UnmapViewOfFile(base);
+#else
             ::munmap(base, size);
+#endif
             base = nullptr;
         }
+#ifdef Q_OS_WIN
+        if (hMap) {
+            ::CloseHandle(hMap);
+            hMap = nullptr;
+        }
+#else
         if (fd >= 0) {
             ::close(fd);
             fd = -1;
         }
+#endif
     }
 
     volatile uint64_t *status() const {
         return reinterpret_cast<volatile uint64_t *>(base);
     }
-    int dupFd() const { return ::dup(fd); }
+    // Value for LTEventDisplayLinkReady.fd: dup'd fd (POSIX) or the mapping
+    // HANDLE value (Windows, same process — the reader MapViewOfFile's it).
+    int32_t handleForEvent() const {
+#ifdef Q_OS_WIN
+        return static_cast<int32_t>(reinterpret_cast<quintptr>(hMap));
+#else
+        return ::dup(fd);
+#endif
+    }
     uint64_t latestSerial() const {
-        return __atomic_load_n(status() + 3, __ATOMIC_SEQ_CST);
+        return ltframe::loadSeq(status() + 3);
     }
 
 private:
@@ -335,10 +378,8 @@ private:
         int frame = 0;
         while (!stopFlag.load()) {
             volatile uint64_t *st = status();
-            const int front = static_cast<int>(
-                __atomic_load_n(st + 4, __ATOMIC_ACQUIRE));
-            const int held = static_cast<int>(
-                __atomic_load_n(st + 8, __ATOMIC_SEQ_CST)) - 1;
+            const int front = static_cast<int>(ltframe::loadAcq(st + 4));
+            const int held = static_cast<int>(ltframe::loadSeq(st + 8)) - 1;
             int idx = -1;
             for (int i = 0; i < 3; ++i) {
                 if (i != front && i != held) {
@@ -349,8 +390,8 @@ private:
             if (idx >= 0) {
                 drawFrame(base + 4096 + static_cast<size_t>(idx) * kHeight * stride,
                           frame);
-                __atomic_store_n(st + 4, static_cast<uint64_t>(idx), __ATOMIC_RELEASE);
-                __atomic_store_n(st + 3, ++serial, __ATOMIC_SEQ_CST);
+                ltframe::storeSeq(st + 4, static_cast<uint64_t>(idx));
+                ltframe::storeSeq(st + 3, ++serial);
                 ++frame;
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(33));
@@ -390,7 +431,6 @@ private:
         }
     }
 };
-#endif // Q_OS_WIN (MockFrameRing)
 struct MockDevice {
     std::string uuid;
     std::string name;
@@ -1622,13 +1662,10 @@ void Bridge::startMockEventLoop() {
 // a 33ms timer forwards new frames as kLTEventFrameAvailable. mock_halt
 // tears it down with kLTEventDisplayLinkClosed.
 
-#ifndef Q_OS_WIN
 static std::unique_ptr<MockFrameRing> g_mockRing;
 static uint64_t g_mockRingLastSent = 0;
-#endif
 
 void Bridge::mockStartDisplayLink(lt_device_t device) {
-#ifndef Q_OS_WIN
     if (!m_mock || !m_ready)
         return;
     mockStopDisplayLink();
@@ -1641,7 +1678,7 @@ void Bridge::mockStartDisplayLink(lt_device_t device) {
     LTEvent e{};
     e.kind = kLTEventDisplayLinkReady;
     e.device = device;
-    e.u.displayLinkReady.fd = g_mockRing->dupFd();
+    e.u.displayLinkReady.fd = g_mockRing->handleForEvent();
     e.u.displayLinkReady.width = MockFrameRing::kWidth;
     e.u.displayLinkReady.height = MockFrameRing::kHeight;
     e.u.displayLinkReady.stride = MockFrameRing::kWidth * 4;
@@ -1665,9 +1702,6 @@ void Bridge::mockStartDisplayLink(lt_device_t device) {
         postEvent(&f);
     });
     m_mockFrameTimer->start(33);
-#else
-    Q_UNUSED(device);
-#endif
 }
 
 void Bridge::mockStopDisplayLink(lt_device_t device) {
@@ -1676,7 +1710,6 @@ void Bridge::mockStopDisplayLink(lt_device_t device) {
         m_mockFrameTimer->deleteLater();
         m_mockFrameTimer = nullptr;
     }
-#ifndef Q_OS_WIN
     if (g_mockRing) {
         g_mockRing->stop();
         g_mockRing.reset();
@@ -1685,7 +1718,4 @@ void Bridge::mockStopDisplayLink(lt_device_t device) {
         e.device = device;
         postEvent(&e);
     }
-#else
-    Q_UNUSED(device);
-#endif
 }

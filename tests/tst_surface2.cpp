@@ -77,6 +77,16 @@ class TstSurface2 : public QObject {
     };
 
 private slots:
+    void initTestCase() {
+        qputenv("LTM_BRIDGE_MOCK", "1");
+        qputenv("LTM_BRIDGE_MOCK_QUIET", "1");
+        qunsetenv("LTM_APPCORE_LIB");
+        // QSettings needs a real organization/app on Windows (registry);
+        // without it the zoom persistence below silently writes nowhere.
+        QCoreApplication::setOrganizationName(QStringLiteral("LightTouchTest"));
+        QCoreApplication::setApplicationName(QStringLiteral("tst_surface2"));
+    }
+
     // The reader protocol itself: writer publishes frames, the reader holds
     // the latest segment and hands it back, pixels land in the held segment.
     void frameRingProtocol() {
@@ -134,7 +144,8 @@ private slots:
         QVERIFY2(f.waitLink(), "DisplayLinkReady never arrived");
         QCOMPARE(f.display.frameWidth(), 320);
         QCOMPARE(f.display.frameHeight(), 480);
-        QVERIFY(f.display.heldFrameIndex() >= 0);
+        // The first frame arrives asynchronously after the link; wait for it.
+        QTRY_VERIFY_WITH_TIMEOUT(f.display.heldFrameIndex() >= 0, 5000);
         // The mock ticks at ~30fps; the UI-thread protocol must advance.
         QSignalSpy frames(&f.display, &LTDisplayAdapter::frameAvailable);
         QVERIFY(frames.isValid());

@@ -131,10 +131,20 @@ private slots:
         QObject *root = f.load("/views/DeviceSidebar.qml", &window);
         QVERIFY2(root != nullptr, "DeviceSidebar.qml failed to load");
         window.show();
+        // The offscreen platform must expose the window (and polish a frame)
+        // before synthetic mouse events can hit delegates.
+        QTRY_VERIFY_WITH_TIMEOUT(window.isExposed(), 5000);
 
         auto *list = root->findChild<QQuickItem *>(QStringLiteral("deviceListView"));
         QVERIFY(list != nullptr);
         QTRY_COMPARE_WITH_TIMEOUT(list->property("count").toInt(), 3, 5000);
+        // Wait for the ListView to actually create its delegates; the model
+        // count above says nothing about layout/polish.
+        QTRY_VERIFY_WITH_TIMEOUT([&] {
+            auto *ci = qobject_cast<QQuickItem *>(
+                list->property("contentItem").value<QObject *>());
+            return ci && !ci->childItems().isEmpty();
+        }(), 5000);
 
         // Click the first row → selectionChanged([iphoneUuid]).
         QSignalSpy selSpy(root, SIGNAL(selectionChanged(QVariant)));

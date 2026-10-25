@@ -12,6 +12,7 @@
 #include <QQmlComponent>
 #include <QQmlContext>
 #include <QQuickItem>
+#include <QQuickWindow>
 
 #include "Bridge.h"
 #include "adapters/LTDeviceListAdapter.h"
@@ -124,8 +125,18 @@ private slots:
 
     void dropHighlightShowsOnlyWhenAccepted() {
         Fixture f;
+        QQuickWindow window;
+        window.resize(300, 300);
         QObject *ring = f.load("/views/DropHighlight.qml");
         QVERIFY2(ring != nullptr, "DropHighlight failed to load");
+        // A windowless QQuickItem's visible flag does not stick on some
+        // platforms (observed on Windows/Qt 6.8); parent to the window.
+        if (auto *item = qobject_cast<QQuickItem *>(ring)) {
+            item->setParentItem(window.contentItem());
+            item->setSize(window.size());
+        }
+        window.show();
+        QTRY_VERIFY_WITH_TIMEOUT(window.isExposed(), 5000);
         QVERIFY(!ring->property("visible").toBool());
         QVERIFY(QMetaObject::invokeMethod(ring, "show",
                                           Q_ARG(QVariant, QVariant(true))));
