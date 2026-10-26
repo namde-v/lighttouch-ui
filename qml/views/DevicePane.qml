@@ -18,6 +18,13 @@ Pane {
     id: root
     padding: 0
 
+    // Alias for the context "display" property (LTDisplayAdapter). A bare
+    // `display` reference inside DeviceScreen resolves to DeviceScreen's OWN
+    // display property first (self-binding + "Binding loop detected" +
+    // display null), never to the context property. At Pane scope there is
+    // no display property, so this alias resolves to the context property.
+    property var displayAdapter: display
+
     readonly property int rowRunning: 2 // lt_bridge.h kLTDeviceRowStateRunning
 
     // Ordered selection from the sidebar.
@@ -94,7 +101,7 @@ Pane {
         // 3: running device → the display (surface 2: DisplayItem + chrome)
         DeviceScreen {
             row: root.selectedRow
-            display: display
+            display: root.displayAdapter
             freeForm: root.freeForm
             keyboardInputEnabled: root.keyboardInputEnabled
             bezelMode: root.bezelMode
